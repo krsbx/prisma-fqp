@@ -1,3 +1,4 @@
+// @ts-ignore
 import { FQP } from 'filter-query-parser';
 import parser from './utils/prismaFqp';
 
