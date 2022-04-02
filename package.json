@@ -1,8 +1,9 @@
 {
   "name": "prisma-fqp",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Filter Query Parser for Prisma ORM",
-  "main": "index.js",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
   "scripts": {
     "dev": "nodemon src/index.ts",
     "test": "jest --watchAll --verbose"

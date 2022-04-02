@@ -1,10 +1,10 @@
 import { FQP } from 'filter-query-parser';
-import prismaFqp from './utils/prismaFqp';
+import parser from './utils/prismaFqp';
 
-const main = (filters: string) => {
+const PrismaFQP = (filters: string) => {
   const fqpParse = FQP.parser(filters);
 
-  return prismaFqp(fqpParse);
+  return parser(fqpParse);
 };
 
-export default main;
+export default PrismaFQP;
