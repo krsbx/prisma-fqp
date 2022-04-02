@@ -1,5 +1,5 @@
 {
-  "name": "prisma-fqp",
+  "name": "@krsbx/prisma-fqp",
   "version": "0.1.0",
   "description": "Filter Query Parser for Prisma ORM",
   "main": "build/index.js",
@@ -13,8 +13,8 @@
     "url": "git+https://github.com/krsbx/filter-query-parser.git"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "krsbx",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/krsbx/filter-query-parser/issues"
   },
