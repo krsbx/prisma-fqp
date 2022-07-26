@@ -1,15 +1,15 @@
-import PrismaFQP from '../src/index';
+import prismaFQP from '../src/index';
 import { OPERATOR } from '../src/utils/constants';
 
 describe('Prisma Filter Query Parser', () => {
   it('It can accept empty filter', () => {
-    const result = PrismaFQP('');
+    const result = prismaFQP('');
 
     expect(result).toEqual({});
   });
 
   it('It can parse single filter', () => {
-    const result = PrismaFQP('field = "value"');
+    const result = prismaFQP('field = "value"');
 
     expect(result).toEqual({
       [OPERATOR.AND]: {
@@ -21,7 +21,7 @@ describe('Prisma Filter Query Parser', () => {
   });
 
   it('It can parse multiple filter', () => {
-    const result = PrismaFQP('username = "krsbx" and id = 1');
+    const result = prismaFQP('username = "krsbx" and id = 1');
 
     expect(result).toEqual({
       [OPERATOR.AND]: {
@@ -36,7 +36,7 @@ describe('Prisma Filter Query Parser', () => {
   });
 
   it('It can parse nested filter', () => {
-    const result = PrismaFQP(
+    const result = prismaFQP(
       'username = "krsbx" and (id = 1 or email = "email@email.com")'
     );
 
@@ -58,7 +58,7 @@ describe('Prisma Filter Query Parser', () => {
   });
 
   it('It can parse not operator', () => {
-    const result = PrismaFQP('username != "krsbx"');
+    const result = prismaFQP('username != "krsbx"');
 
     expect(result).toEqual({
       [OPERATOR.AND]: {
