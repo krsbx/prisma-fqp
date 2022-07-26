@@ -1,7 +1,7 @@
 import { FQP } from 'filter-query-parser';
 import parser from './utils/prismaFqp';
 
-const PrismaFQP = (filters: string) => {
+const prismaFQP = (filters: string) => {
   if (filters.trim() === '') {
     return {};
   }
@@ -11,4 +11,4 @@ const PrismaFQP = (filters: string) => {
   return parser(fqpParse);
 };
 
-export default PrismaFQP;
+export = prismaFQP;
