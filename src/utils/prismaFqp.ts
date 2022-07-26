@@ -1,9 +1,10 @@
+import type { Parser } from 'filter-query-parser';
 import cleanup from './cleanup';
-import { IFQP, OperatorType } from './interface';
 import fqpParser from './parser';
+import { AnyRecord, OperatorType } from './interface';
 
-// Change notEquals to { not:{ equals: value } }
-const cleanupFqp = (result: Record<any, any>) => {
+// Change notEquals to { not : { equals: value } }
+const cleanupFqp = (result: AnyRecord) => {
   const keys = Object.keys(result);
 
   keys.forEach((key) => {
@@ -22,7 +23,7 @@ const cleanupFqp = (result: Record<any, any>) => {
   return result;
 };
 
-const fqpPrisma = (fqp: IFQP) => {
+const fqpPrisma = (fqp: Parser) => {
   const rawParse = fqpParser(fqp);
   const cleanParse = cleanupFqp(rawParse);
 

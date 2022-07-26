@@ -1,16 +1,17 @@
+import type { Parser } from 'filter-query-parser';
 import { OPERATOR } from './constants';
-import { IFQP, OperatorKey } from './interface';
+import { AnyRecord, OperatorKey } from './interface';
 
-const fqpParser = (fqp: IFQP) => {
+const fqpParser = (fqp: Parser) => {
   const { condition, rules } = fqp;
-  const result: Record<any, any> = {};
+  const result: AnyRecord = {};
 
   rules.forEach((rule) => {
     // If its a new Parser fields
     if (!rule.field) {
       return (result[condition] = {
         ...result[condition],
-        ...fqpParser(rule as unknown as IFQP),
+        ...fqpParser(rule as unknown as Parser),
       });
     }
 

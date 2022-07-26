@@ -1,7 +1,7 @@
-import { OperatorType } from './interface';
+import { AnyRecord, OperatorType } from './interface';
 
 const cleanup = (
-  result: Record<any, any>,
+  result: AnyRecord,
   key: OperatorType,
   value: number | string
 ) => {
