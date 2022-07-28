@@ -70,4 +70,44 @@ describe('Prisma Filter Query Parser', () => {
       },
     });
   });
+
+  it('It can parse null filter', () => {
+    const result = prismaFQP('username null');
+
+    expect(result).toEqual({
+      [OPERATOR.AND]: {
+        username: {
+          [OPERATOR['=']]: null,
+        },
+      },
+    });
+  });
+
+  it('It can parse not null filter', () => {
+    const result = prismaFQP('username not null');
+
+    expect(result).toEqual({
+      [OPERATOR.AND]: {
+        username: {
+          [OPERATOR.NOT]: {
+            [OPERATOR['=']]: null,
+          },
+        },
+      },
+    });
+  });
+
+  it('It can parse does not contain filter', () => {
+    const result = prismaFQP('username does not contain "krsbx"');
+
+    expect(result).toEqual({
+      [OPERATOR.AND]: {
+        username: {
+          [OPERATOR.NOT]: {
+            [OPERATOR.CONTAINS]: 'krsbx',
+          },
+        },
+      },
+    });
+  });
 });
