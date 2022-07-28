@@ -74,3 +74,16 @@ async findAll<T extends typeof this.model>(conditions: Where, filterQueryParams:
 ```
 
 ###### This `baseRepository.ts` is using baseRepository that [prisma-repo](https://github.com/krsbx/prisma-repo) generate
+
+# Unsupported Filter
+
+Unfortunately since Prisma query structures is quite strict, `@krsbx/prisma-fqp` cannot convert this kind of filters
+| Filters | Alternatives |
+|:--------|:-------------|
+|`BETWEEN`| use `>` or `>=` and `<` or `<=` with `and` condition|
+|`NOT BETWEEN` | use the same approach with `BETWEEN` but with in reverse|
+|`EXACTLY MATCHES`| - |
+
+For `EXACTLY MATCHES` are still work in progress since there is an options on `prismaFQP` for enabling `caseSensitive`
+
+The `caseSensitive` is still in progress as well

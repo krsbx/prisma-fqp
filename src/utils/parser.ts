@@ -1,8 +1,8 @@
 import type { Parser } from 'filter-query-parser';
-import { OPERATOR } from './constants';
-import { AnyRecord, OperatorKey } from './interface';
+import cleanupFilter from './cleanup';
+import { AnyRecord, Options } from './interface';
 
-const fqpParser = (fqp: Parser) => {
+const fqpParser = (fqp: Parser, options: Options = {}) => {
   const { condition, rules } = fqp;
   const result: AnyRecord = {};
 
@@ -11,14 +11,11 @@ const fqpParser = (fqp: Parser) => {
     if (!rule.field) {
       return (result[condition] = {
         ...result[condition],
-        ...fqpParser(rule as unknown as Parser),
+        ...fqpParser(rule as unknown as Parser, options),
       });
     }
 
-    const { field, operator, value } = rule;
-
-    const op = operator.toUpperCase() as OperatorKey;
-    const validOp = OPERATOR[op];
+    const { field, validOp, value } = cleanupFilter(rule);
 
     if (!validOp) return;
 

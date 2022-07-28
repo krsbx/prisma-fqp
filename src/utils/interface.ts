@@ -1,11 +1,13 @@
 import { Parser as OriginalParser } from 'filter-query-parser';
-import { OPERATOR } from './constants';
+import { OPERATOR, MATCH_SETTINGS } from './constants';
 
 export type OperatorKey = keyof typeof OPERATOR;
 
 export type OperatorType = typeof OPERATOR[OperatorKey];
 
-export interface IRules {
+export type OperatorKeyMap = Record<OperatorKey, OperatorKey>;
+
+export interface Rules {
   field: string;
   operator: OperatorKey;
   value: string | number | symbol | boolean | null;
@@ -13,8 +15,15 @@ export interface IRules {
 
 export interface Parser extends OriginalParser {
   condition: OperatorKey;
-  rules: IRules[];
+  rules: Rules[];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AnyRecord = Record<string, any>;
+
+export type Options = {
+  caseSensitive?: boolean;
+};
+
+export type CaseSensitiveType =
+  typeof MATCH_SETTINGS[keyof typeof MATCH_SETTINGS];
