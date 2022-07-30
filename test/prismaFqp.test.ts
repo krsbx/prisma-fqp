@@ -1,5 +1,5 @@
 import prismaFQP from '../src/index';
-import { OPERATOR } from '../src/utils/constants';
+import { OPERATOR, MATCH_SETTINGS } from '../src/utils/constants';
 
 describe('Prisma Filter Query Parser', () => {
   it('It can accept empty filter', () => {
@@ -15,6 +15,7 @@ describe('Prisma Filter Query Parser', () => {
       [OPERATOR.AND]: {
         field: {
           [OPERATOR['=']]: 'value',
+          mode: MATCH_SETTINGS.DEFAULT,
         },
       },
     });
@@ -30,6 +31,7 @@ describe('Prisma Filter Query Parser', () => {
         },
         username: {
           [OPERATOR['=']]: 'krsbx',
+          mode: MATCH_SETTINGS.DEFAULT,
         },
       },
     });
@@ -44,6 +46,7 @@ describe('Prisma Filter Query Parser', () => {
       [OPERATOR.AND]: {
         username: {
           [OPERATOR['=']]: 'krsbx',
+          mode: MATCH_SETTINGS.DEFAULT,
         },
         [OPERATOR.OR]: {
           id: {
@@ -51,6 +54,7 @@ describe('Prisma Filter Query Parser', () => {
           },
           email: {
             [OPERATOR['=']]: 'email@email.com',
+            mode: MATCH_SETTINGS.DEFAULT,
           },
         },
       },
@@ -65,6 +69,7 @@ describe('Prisma Filter Query Parser', () => {
         username: {
           [OPERATOR.NOT]: {
             [OPERATOR['=']]: 'krsbx',
+            mode: MATCH_SETTINGS.DEFAULT,
           },
         },
       },
@@ -78,6 +83,7 @@ describe('Prisma Filter Query Parser', () => {
       [OPERATOR.AND]: {
         username: {
           [OPERATOR['=']]: null,
+          mode: MATCH_SETTINGS.DEFAULT,
         },
       },
     });
@@ -91,6 +97,7 @@ describe('Prisma Filter Query Parser', () => {
         username: {
           [OPERATOR.NOT]: {
             [OPERATOR['=']]: null,
+            mode: MATCH_SETTINGS.DEFAULT,
           },
         },
       },
@@ -105,7 +112,34 @@ describe('Prisma Filter Query Parser', () => {
         username: {
           [OPERATOR.NOT]: {
             [OPERATOR.CONTAINS]: 'krsbx',
+            mode: MATCH_SETTINGS.DEFAULT,
           },
+        },
+      },
+    });
+  });
+
+  it('It can parse between filter', () => {
+    const result = prismaFQP('id between (1,10)');
+
+    expect(result).toEqual({
+      [OPERATOR.AND]: {
+        id: {
+          [OPERATOR['>=']]: 1,
+          [OPERATOR['<=']]: 10,
+        },
+      },
+    });
+  });
+
+  it('It can parse not between filter', () => {
+    const result = prismaFQP('id not between (1,10)');
+
+    expect(result).toEqual({
+      [OPERATOR.AND]: {
+        id: {
+          [OPERATOR['<']]: 1,
+          [OPERATOR['>']]: 10,
         },
       },
     });

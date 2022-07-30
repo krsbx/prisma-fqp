@@ -19,6 +19,9 @@ export const OPERATOR = {
   LIKE: 'contains',
   NULL: 'equals',
   'NOT NULL': 'not',
+  BETWEEN: 'between',
+  'NOT BETWEEN': 'between',
+  'EXACTLY MATCHES': 'equals',
 } as const;
 
 export const OPERATOR_KEYS = Object.keys(OPERATOR).reduce(
@@ -30,6 +33,6 @@ export const OPERATOR_KEYS = Object.keys(OPERATOR).reduce(
 );
 
 export const MATCH_SETTINGS = {
+  DEFAULT: 'default',
   INSENSITIVE: 'insensitive',
-  CASE_SENSITIVE: 'default',
 } as const;

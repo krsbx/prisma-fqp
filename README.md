@@ -8,6 +8,8 @@ Using [filter-query-parser](https://github.com/VJD7/filter-query-parser/) as the
 
 1. Create a new Middleware that can be use for all routes e.g. `parserMw`
 
+> This examples is an examples for a Backend that use [Express.js](https://www.npmjs.com/package/express)
+
 - Javascript
 
 ```js
@@ -16,7 +18,7 @@ Using [filter-query-parser](https://github.com/VJD7/filter-query-parser/) as the
 const prismaFQP = require('@krsbx/prisma-fqp');
 
 exports.queryParserMw = (req, res, next) => {
-  req.filterQueryParams = req.query.filters ? prismaFQP(req.query.filters as string) : {};
+  req.filterQueryParams = req.query.filters ? prismaFQP(req.query.filters) : {};
   delete req.query.filters;
   return next();
 };
@@ -38,7 +40,9 @@ export const queryParserMw = (req, res, next) => {
 };
 ```
 
-2. Use FQP Results in baseRepository/abstract base repository
+> Use [express-asyncmw](https://www.npmjs.com/package/express-asyncmw) to return a response error automatically on every Errors in your backend
+
+2. Use FQP Results in baseRepository/abstract class BaseRepository
 
 - Javascript
 
@@ -73,17 +77,16 @@ async findAll<T extends typeof this.model>(conditions: Where, filterQueryParams:
   }
 ```
 
-###### This `baseRepository.ts` is using baseRepository that [prisma-repo](https://github.com/krsbx/prisma-repo) generate
+> This `baseRepository.ts` is using baseRepository that [prisma-repo](https://www.npmjs.com/package/prisma-repo) generate
 
-# Unsupported Filter
+# Case Sensitive filters
 
-Unfortunately since Prisma query structures is quite strict, `@krsbx/prisma-fqp` cannot convert this kind of filters
-| Filters | Alternatives |
-|:--------|:-------------|
-|`BETWEEN`| use `>` or `>=` and `<` or `<=` with `and` condition|
-|`NOT BETWEEN` | use the same approach with `BETWEEN` but with in reverse|
-|`EXACTLY MATCHES`| - |
+The `caseSensitive` is only available on certain databse provider. Read more about it in [Case-insensitive filtering](https://www.prisma.io/docs/concepts/components/prisma-client/filtering-and-sorting#case-insensitive-filtering).
 
-For `EXACTLY MATCHES` are still work in progress since there is an options on `prismaFQP` for enabling `caseSensitive`
+# Options
 
-The `caseSensitive` is still in progress as well
+```ts
+caseSensitive: boolean;
+```
+
+> Determine whether use a caseSensitive filters or not. Default is `false` which use the default value from Prisma. But, if it true it will use `insensitive` mode on filtering the results.

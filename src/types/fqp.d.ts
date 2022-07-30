@@ -2,7 +2,7 @@ declare module 'filter-query-parser' {
   export type Rule = {
     field: string;
     operator: string;
-    value: string | number | symbol | boolean | null | object;
+    value: string | number | symbol | boolean | null | object | never[];
   };
 
   export type Query = Rule & {
