@@ -7,7 +7,8 @@
     "build": "tsc",
     "dev": "nodemon src/index.ts",
     "prepare": "husky install",
-    "test": "jest --watchAll --verbose"
+    "test": "jest --verbose",
+    "test:dev": "jest --watchAll --verbose"
   },
   "repository": {
     "type": "git",
