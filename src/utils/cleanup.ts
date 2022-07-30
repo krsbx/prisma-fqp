@@ -5,9 +5,11 @@ import { OperatorKey } from './interface';
 const cleanupFilter = (rule: Rule | Query) => {
   const { field, operator } = rule;
   let value = rule.value;
+  let inRange = false;
 
   const op = operator.toUpperCase() as OperatorKey;
   const validOp = OPERATOR[op];
+  const isString = typeof value === 'string';
 
   switch (op) {
     case OPERATOR_KEYS.NULL:
@@ -42,11 +44,34 @@ const cleanupFilter = (rule: Rule | Query) => {
       };
       break;
 
+    case OPERATOR_KEYS.BETWEEN:
+      inRange = true;
+
+      if (Array.isArray(value)) {
+        value = {
+          [OPERATOR['>=']]: value[0],
+          [OPERATOR['<=']]: value[1],
+        };
+      }
+      break;
+
+    case OPERATOR_KEYS['NOT BETWEEN']:
+      inRange = true;
+
+      // Reverse the operator
+      if (Array.isArray(value)) {
+        value = {
+          [OPERATOR['<']]: value[0],
+          [OPERATOR['>']]: value[1],
+        };
+      }
+      break;
+
     default:
       break;
   }
 
-  return { field, validOp, value };
+  return { field, validOp, value, isString, inRange };
 };
 
 export default cleanupFilter;
