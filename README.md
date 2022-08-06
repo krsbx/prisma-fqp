@@ -89,4 +89,5 @@ The `caseSensitive` is only available on certain databse provider. Read more abo
 caseSensitive: boolean;
 ```
 
+> !!! We deprecate this features in v0.2.5+ !!!
 > Determine whether use a caseSensitive filters or not. Default is `false` which use the default value from Prisma. But, if it true it will use `insensitive` mode on filtering the results.

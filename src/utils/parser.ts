@@ -1,12 +1,12 @@
 import type { Parser } from 'filter-query-parser';
 import cleanupFilter from './cleanup';
-import { MATCH_SETTINGS } from './constants';
 import { AnyRecord, Options } from './interface';
 
 const createFilter = <
   T extends Omit<ReturnType<typeof cleanupFilter>, 'field' | 'inRange'>
 >(
   { isString, validOp, value }: T,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   options: Options = {}
 ) => {
   const filter = {
@@ -14,20 +14,6 @@ const createFilter = <
   };
 
   if (!isString) return filter;
-
-  const mode = options?.caseSensitive
-    ? MATCH_SETTINGS.DEFAULT
-    : MATCH_SETTINGS.INSENSITIVE;
-
-  if (filter.not) {
-    Object.assign(filter.not, {
-      mode,
-    });
-  } else {
-    Object.assign(filter, {
-      mode,
-    });
-  }
 
   return filter;
 };
