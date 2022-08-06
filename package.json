@@ -1,6 +1,6 @@
 {
   "name": "@krsbx/prisma-fqp",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Filter Query Parser for Prisma ORM",
   "main": "dist/index.js",
   "scripts": {
@@ -22,7 +22,8 @@
   },
   "homepage": "https://github.com/krsbx/filter-query-parser#readme",
   "dependencies": {
-    "filter-query-parser": "^2.2.0"
+    "filter-query-parser": "^2.2.0",
+    "moment": "^2.29.4"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.0.3",

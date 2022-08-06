@@ -4,11 +4,11 @@ import { AnyRecord, Options } from './interface';
 
 const createFilter = <
   T extends Omit<ReturnType<typeof cleanupFilter>, 'field' | 'inRange'>
->(
-  { isString, validOp, value }: T,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  options: Options = {}
-) => {
+>({
+  isString,
+  validOp,
+  value,
+}: T) => {
   const filter = {
     [validOp]: value,
   };
@@ -35,7 +35,7 @@ const fqpParser = (fqp: Parser, options: Options = {}) => {
 
     if (!validOp) return;
 
-    const filter = createFilter({ isString, validOp, value }, options);
+    const filter = createFilter({ isString, validOp, value });
 
     result[condition] = {
       ...result[condition],

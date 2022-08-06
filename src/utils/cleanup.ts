@@ -1,4 +1,5 @@
 import type { Rule, Query } from 'filter-query-parser';
+import moment from 'moment';
 import { OPERATOR, OPERATOR_KEYS } from './constants';
 import { OperatorKey } from './interface';
 
@@ -10,6 +11,9 @@ const cleanupFilter = (rule: Rule | Query) => {
   const op = operator.toUpperCase() as OperatorKey;
   const validOp = OPERATOR[op];
   const isString = typeof value === 'string';
+
+  if (moment(String(value), 'YYYY-MM-DD', true).isValid())
+    value = moment(String(value)).toDate();
 
   switch (op) {
     case OPERATOR_KEYS.NULL:
