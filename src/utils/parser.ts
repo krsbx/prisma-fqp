@@ -1,22 +1,7 @@
 import type { Parser } from 'filter-query-parser';
 import cleanupFilter from './cleanup';
+import createFilter from './createFilter';
 import { AnyRecord, Options } from './interface';
-
-const createFilter = <
-  T extends Omit<ReturnType<typeof cleanupFilter>, 'field' | 'inRange'>
->({
-  isString,
-  validOp,
-  value,
-}: T) => {
-  const filter = {
-    [validOp]: value,
-  };
-
-  if (!isString) return filter;
-
-  return filter;
-};
 
 const fqpParser = (fqp: Parser, options: Options = {}) => {
   const { condition, rules } = fqp;
@@ -31,11 +16,12 @@ const fqpParser = (fqp: Parser, options: Options = {}) => {
       });
     }
 
-    const { field, validOp, value, inRange, isString } = cleanupFilter(rule);
+    const { field, validOp, value, inRange, isString, nested } =
+      cleanupFilter(rule);
 
     if (!validOp) return;
 
-    const filter = createFilter({ isString, validOp, value });
+    const filter = createFilter({ isString, validOp, value, nested });
 
     result[condition] = {
       ...result[condition],

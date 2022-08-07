@@ -1,5 +1,5 @@
 import prismaFQP from '../src/index';
-import { OPERATOR, MATCH_SETTINGS } from '../src/utils/constants';
+import { OPERATOR } from '../src/utils/constants';
 
 describe('Prisma Filter Query Parser', () => {
   it('It can accept empty filter', () => {
@@ -132,6 +132,48 @@ describe('Prisma Filter Query Parser', () => {
         id: {
           [OPERATOR['<']]: 1,
           [OPERATOR['>']]: 10,
+        },
+      },
+    });
+  });
+
+  it('It can parse in filter', () => {
+    const result = prismaFQP('id in (1,2,3)');
+
+    expect(result).toEqual({
+      [OPERATOR.AND]: {
+        id: {
+          [OPERATOR.IN]: [1, 2, 3],
+        },
+      },
+    });
+  });
+
+  it('It can parse not in filter', () => {
+    const result = prismaFQP('id not in (1,2,3)');
+
+    expect(result).toEqual({
+      [OPERATOR.AND]: {
+        id: {
+          [OPERATOR.NOT]: {
+            [OPERATOR.IN]: [1, 2, 3],
+          },
+        },
+      },
+    });
+  });
+
+  it('It can parse filter splitted with .', () => {
+    const result = prismaFQP('user.profile.username = "user"');
+
+    expect(result).toEqual({
+      [OPERATOR.AND]: {
+        user: {
+          profile: {
+            username: {
+              [OPERATOR['=']]: 'user',
+            },
+          },
         },
       },
     });

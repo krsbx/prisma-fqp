@@ -79,6 +79,29 @@ async findAll<T extends typeof this.model>(conditions: Where, filterQueryParams:
 
 > This `baseRepository.ts` is using baseRepository that [prisma-repo](https://www.npmjs.com/package/prisma-repo) generate
 
+# Keep In Mind
+
+If you use a filter that split with `.` e.g. `user.email` and combine it with `OR` - `user.username`, it will use `OR` in the top level filter, so `prisma` will read it like this
+
+```ts
+
+where: {
+  OR: {
+    user: {     // In here it read as user that
+      email: {  // email is ... `AND` username is ...
+        equals: 'user@user.com'
+      },
+      username: {
+        equals: 'user',
+      },
+    }
+  }
+}
+
+```
+
+Anyone who want to contribute to fix this issue are always welcome
+
 # Case Sensitive filters
 
 The `caseSensitive` is only available on certain databse provider. Read more about it in [Case-insensitive filtering](https://www.prisma.io/docs/concepts/components/prisma-client/filtering-and-sorting#case-insensitive-filtering).
