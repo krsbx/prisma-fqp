@@ -1,14 +1,17 @@
 import type { Rule, Query } from 'filter-query-parser';
 import moment from 'moment';
 import { OPERATOR, OPERATOR_KEYS } from './constants';
+import { convertRange } from './converter';
 import { OperatorKey } from './interface';
 
 const cleanupFilter = (rule: Rule | Query) => {
-  const { field, operator } = rule;
+  const fields = rule.field.split('.');
+  const field = String(fields.shift());
+
   let value = rule.value;
   let inRange = false;
 
-  const op = operator.toUpperCase() as OperatorKey;
+  const op = rule.operator.toUpperCase() as OperatorKey;
   const validOp = OPERATOR[op];
   const isString = typeof value === 'string';
 
@@ -52,6 +55,8 @@ const cleanupFilter = (rule: Rule | Query) => {
       inRange = true;
 
       if (Array.isArray(value)) {
+        convertRange(value);
+
         value = {
           [OPERATOR['>=']]: value[0],
           [OPERATOR['<=']]: value[1],
@@ -64,6 +69,9 @@ const cleanupFilter = (rule: Rule | Query) => {
 
       // Reverse the operator
       if (Array.isArray(value)) {
+        convertRange(value);
+
+        // ValidOp value is 'not'
         value = {
           [OPERATOR['<']]: value[0],
           [OPERATOR['>']]: value[1],
@@ -75,7 +83,14 @@ const cleanupFilter = (rule: Rule | Query) => {
       break;
   }
 
-  return { field, validOp, value, isString, inRange };
+  return {
+    field,
+    validOp,
+    value,
+    isString,
+    inRange,
+    nested: fields,
+  };
 };
 
 export default cleanupFilter;
