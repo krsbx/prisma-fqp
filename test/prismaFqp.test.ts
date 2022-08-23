@@ -1,5 +1,5 @@
 import prismaFQP from '../src/index';
-import { OPERATOR } from '../src/utils/constants';
+import { CONDITION, OPERATOR } from '../src/utils/constants';
 
 describe('Prisma Filter Query Parser', () => {
   it('It can accept empty filter', () => {
@@ -12,11 +12,13 @@ describe('Prisma Filter Query Parser', () => {
     const result = prismaFQP('field = "value"');
 
     expect(result).toEqual({
-      [OPERATOR.AND]: {
-        field: {
-          [OPERATOR['=']]: 'value',
+      [CONDITION.AND]: [
+        {
+          field: {
+            [OPERATOR['=']]: 'value',
+          },
         },
-      },
+      ],
     });
   });
 
@@ -24,14 +26,18 @@ describe('Prisma Filter Query Parser', () => {
     const result = prismaFQP('username = "krsbx" and id = 1');
 
     expect(result).toEqual({
-      [OPERATOR.AND]: {
-        id: {
-          [OPERATOR['=']]: 1,
+      [CONDITION.AND]: [
+        {
+          username: {
+            [OPERATOR['=']]: 'krsbx',
+          },
         },
-        username: {
-          [OPERATOR['=']]: 'krsbx',
+        {
+          id: {
+            [OPERATOR['=']]: 1,
+          },
         },
-      },
+      ],
     });
   });
 
@@ -41,19 +47,27 @@ describe('Prisma Filter Query Parser', () => {
     );
 
     expect(result).toEqual({
-      [OPERATOR.AND]: {
-        username: {
-          [OPERATOR['=']]: 'krsbx',
-        },
-        [OPERATOR.OR]: {
-          id: {
-            [OPERATOR['=']]: 1,
-          },
-          email: {
-            [OPERATOR['=']]: 'email@email.com',
+      [CONDITION.AND]: [
+        {
+          username: {
+            [OPERATOR['=']]: 'krsbx',
           },
         },
-      },
+        {
+          [CONDITION.OR]: [
+            {
+              id: {
+                [OPERATOR['=']]: 1,
+              },
+            },
+            {
+              email: {
+                [OPERATOR['=']]: 'email@email.com',
+              },
+            },
+          ],
+        },
+      ],
     });
   });
 
@@ -61,13 +75,15 @@ describe('Prisma Filter Query Parser', () => {
     const result = prismaFQP('username != "krsbx"');
 
     expect(result).toEqual({
-      [OPERATOR.AND]: {
-        username: {
-          [OPERATOR.NOT]: {
-            [OPERATOR['=']]: 'krsbx',
+      [CONDITION.AND]: [
+        {
+          username: {
+            [OPERATOR.NOT]: {
+              [OPERATOR['=']]: 'krsbx',
+            },
           },
         },
-      },
+      ],
     });
   });
 
@@ -75,11 +91,13 @@ describe('Prisma Filter Query Parser', () => {
     const result = prismaFQP('username null');
 
     expect(result).toEqual({
-      [OPERATOR.AND]: {
-        username: {
-          [OPERATOR['=']]: null,
+      [CONDITION.AND]: [
+        {
+          username: {
+            [OPERATOR['=']]: null,
+          },
         },
-      },
+      ],
     });
   });
 
@@ -87,13 +105,15 @@ describe('Prisma Filter Query Parser', () => {
     const result = prismaFQP('username not null');
 
     expect(result).toEqual({
-      [OPERATOR.AND]: {
-        username: {
-          [OPERATOR.NOT]: {
-            [OPERATOR['=']]: null,
+      [CONDITION.AND]: [
+        {
+          username: {
+            [OPERATOR.NOT]: {
+              [OPERATOR['=']]: null,
+            },
           },
         },
-      },
+      ],
     });
   });
 
@@ -101,13 +121,15 @@ describe('Prisma Filter Query Parser', () => {
     const result = prismaFQP('username does not contain "krsbx"');
 
     expect(result).toEqual({
-      [OPERATOR.AND]: {
-        username: {
-          [OPERATOR.NOT]: {
-            [OPERATOR.CONTAINS]: 'krsbx',
+      [CONDITION.AND]: [
+        {
+          username: {
+            [OPERATOR.NOT]: {
+              [OPERATOR.CONTAINS]: 'krsbx',
+            },
           },
         },
-      },
+      ],
     });
   });
 
@@ -115,12 +137,14 @@ describe('Prisma Filter Query Parser', () => {
     const result = prismaFQP('id between (1,10)');
 
     expect(result).toEqual({
-      [OPERATOR.AND]: {
-        id: {
-          [OPERATOR['>=']]: 1,
-          [OPERATOR['<=']]: 10,
+      [CONDITION.AND]: [
+        {
+          id: {
+            [OPERATOR['>=']]: 1,
+            [OPERATOR['<=']]: 10,
+          },
         },
-      },
+      ],
     });
   });
 
@@ -128,12 +152,14 @@ describe('Prisma Filter Query Parser', () => {
     const result = prismaFQP('id not between (1,10)');
 
     expect(result).toEqual({
-      [OPERATOR.AND]: {
-        id: {
-          [OPERATOR['<']]: 1,
-          [OPERATOR['>']]: 10,
+      [CONDITION.AND]: [
+        {
+          id: {
+            [OPERATOR['<']]: 1,
+            [OPERATOR['>']]: 10,
+          },
         },
-      },
+      ],
     });
   });
 
@@ -141,11 +167,13 @@ describe('Prisma Filter Query Parser', () => {
     const result = prismaFQP('id in (1,2,3)');
 
     expect(result).toEqual({
-      [OPERATOR.AND]: {
-        id: {
-          [OPERATOR.IN]: [1, 2, 3],
+      [CONDITION.AND]: [
+        {
+          id: {
+            [OPERATOR.IN]: [1, 2, 3],
+          },
         },
-      },
+      ],
     });
   });
 
@@ -153,13 +181,15 @@ describe('Prisma Filter Query Parser', () => {
     const result = prismaFQP('id not in (1,2,3)');
 
     expect(result).toEqual({
-      [OPERATOR.AND]: {
-        id: {
-          [OPERATOR.NOT]: {
-            [OPERATOR.IN]: [1, 2, 3],
+      [CONDITION.AND]: [
+        {
+          id: {
+            [OPERATOR.NOT]: {
+              [OPERATOR.IN]: [1, 2, 3],
+            },
           },
         },
-      },
+      ],
     });
   });
 
@@ -167,15 +197,17 @@ describe('Prisma Filter Query Parser', () => {
     const result = prismaFQP('user.profile.username = "user"');
 
     expect(result).toEqual({
-      [OPERATOR.AND]: {
-        user: {
-          profile: {
-            username: {
-              [OPERATOR['=']]: 'user',
+      [CONDITION.AND]: [
+        {
+          user: {
+            profile: {
+              username: {
+                [OPERATOR['=']]: 'user',
+              },
             },
           },
         },
-      },
+      ],
     });
   });
 });

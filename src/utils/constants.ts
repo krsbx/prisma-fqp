@@ -1,8 +1,6 @@
-import { OperatorKeyMap } from './interface';
+import type { OperatorKeyMap } from './interface';
 
-export const OPERATOR = {
-  AND: 'AND',
-  OR: 'OR',
+export const OPERATOR: Record<string, string> = {
   '<': 'lt',
   '<=': 'lte',
   '>': 'gt',
@@ -24,6 +22,11 @@ export const OPERATOR = {
   'EXACTLY MATCHES': 'equals',
 } as const;
 
+export const CONDITION: Record<string, string> = {
+  AND: 'AND',
+  OR: 'OR',
+} as const;
+
 export const OPERATOR_KEYS = Object.keys(OPERATOR).reduce(
   (curr, value) => ({
     ...curr,
@@ -31,8 +34,3 @@ export const OPERATOR_KEYS = Object.keys(OPERATOR).reduce(
   }),
   {} as OperatorKeyMap
 );
-
-export const MATCH_SETTINGS = {
-  DEFAULT: 'default',
-  INSENSITIVE: 'insensitive',
-} as const;
