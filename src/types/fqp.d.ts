@@ -2,25 +2,22 @@ declare module 'filter-query-parser' {
   export type Rule = {
     field: string;
     operator: string;
-    value: string | number | symbol | boolean | null | object | never[];
-  };
-
-  export type Query = Rule & {
-    condition: string;
-    not: boolean;
+    value: never | never[] | object | null;
   };
 
   export type Parser = {
     condition: string;
-    rules: (Rule | Query)[];
-    not: false;
+    rules: Rule[] | Parser[];
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const parse: () => any;
+  const stringify: (obj: Parser) => string;
+  const parser: (query: string) => Parser;
+
   export const FQP = {
-    parse: () => any,
-    /* eslint-disable @typescript-eslint/no-unused-vars */
-    stringify: (obj: Parser, customField: string) => string,
-    parser: (query: string) => Parser,
-    /* eslint-enable @typescript-eslint/no-unused-vars */
+    parse,
+    stringify,
+    parser,
   };
 }

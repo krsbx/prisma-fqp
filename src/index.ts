@@ -1,18 +1,12 @@
 import { FQP } from 'filter-query-parser';
-import { Options } from './utils/interface';
-import parser from './utils/prismaFqp';
+import parser from './utils/prismaFQP';
 
-const prismaFQP = (
-  filters: string,
-  options: Options = { caseSensitive: true }
-) => {
-  if (filters.trim() === '') {
-    return {};
-  }
+const prismaFQP = (filters: string) => {
+  if (filters.trim() === '') return {};
 
   const fqpParse = FQP.parser(filters);
 
-  return parser(fqpParse, options);
+  return parser(fqpParse);
 };
 
 export = prismaFQP;
